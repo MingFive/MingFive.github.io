@@ -1,0 +1,656 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="java,算术位移,后台技术," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="对算术位移一次学习的理解，转载而来">
+<meta property="og:type" content="article">
+<meta property="og:title" content="java移位运算符：<<（左移）、>>（带符号右移）和>>>（无符号右移）">
+<meta property="og:url" content="http://yoursite.com/2017/03/30/java_ShiftOperators_20170330/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="对算术位移一次学习的理解，转载而来">
+<meta property="og:updated_time" content="2017-03-30T08:59:44.492Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="java移位运算符：<<（左移）、>>（带符号右移）和>>>（无符号右移）">
+<meta name="twitter:description" content="对算术位移一次学习的理解，转载而来">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/03/30/java_ShiftOperators_20170330/"/>
+
+
+
+
+
+  <title> java移位运算符：<<（左移）、>>（带符号右移）和>>>（无符号右移） | Hexo </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hexo</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Startseite
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archiv
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/03/30/java_ShiftOperators_20170330/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                java移位运算符：<<（左移）、>>（带符号右移）和>>>（无符号右移）
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-03-30T00:00:00+08:00">
+                2017-03-30
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+              <div class="post-description">
+                  对算术位移一次学习的理解，转载而来
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>　　<strong>1、 左移运算符</strong><br>　　左移运算符&lt;&lt;使指定值的所有位都左移规定的次数。<br>　　1）它的通用格式如下所示：<br>　　　value &lt;&lt; num<br>　　　num 指定要移位值value 移动的位数。<br>　　　左移的规则只记住一点：丢弃最高位，0补最低位<br>　　　如果移动的位数超过了该类型的最大位数，那么编译器会对移动的位数取模。<br>　　　如对int型移动33位，实际上只移动了332=1位。<br>　　2）运算规则<br>　　　按二进制形式把所有的数字向左移动对应的位数，高位移出(舍弃)，低位的空位补零。<br>　　　当左移的运算数是int 类型时，每移动1位它的第31位就要被移出并且丢弃；<br>　　　当左移的运算数是long 类型时，每移动1位它的第63位就要被移出并且丢弃。<br>　　　当左移的运算数是byte 和short类型时，将自动把这些类型扩大为 int 型。<br>　　3）数学意义<br>　　　在数字没有溢出的前提下，对于正数和负数，左移一位都相当于乘以2的1次方，左移n位就相当于乘以2的n次方<br>　　4）计算过程：<br>　　　例如：3 &lt;<2(3为int型) 　　　1）把3转换为二进制数字0000="" 0000="" 0011，="" 　　　2）把该数字高位(左侧)的两个零移出，其他的数字都朝左平移2位，="" 　　　3）在低位(右侧)的两个空位补零。则得到的最终结果是0000="" 1100，="" 　　　转换为十进制是12。="" 　　　移动的位数超过了该类型的最大位数，="" 　　　如果移进高阶位（31或63位），那么该值将变为负值。下面的程序说明了这一点：="" 　　　java代码="" <figure="" class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">　　　// Left shifting as a quick way to multiply by 2.</div><div class="line">　　　public class MultByTwo &#123;</div><div class="line">	　　　public static void main(String args[]) &#123;</div><div class="line">		　　　int i;</div><div class="line">		　　　int num = 0xFFFFFFE;</div><div class="line">		　　　for(i=0; i&lt;4; i++) &#123;</div><div class="line">			　　　num = num &lt;&lt; 1;</div><div class="line">			　　　System.out.println(num);</div><div class="line">		　　　&#125;</div><div class="line">	　　　&#125;</div><div class="line">　　　&#125;</div></pre></td></tr></table></2(3为int型)></p>
+<p>　　　该程序的输出如下所示：<br>　　　536870908<br>　　　1073741816<br>　　　2147483632<br>　　　-32<br>　　　注：n位二进制，最高位为符号位，因此表示的数值范围-2^(n-1) ——2^(n-1) -1,所以模为2^(n-1)。<br>　　<br>　　<strong>2、 右移运算符</strong><br>　　右移运算符&lt;&lt;使指定值的所有位都右移规定的次数。<br>　　1）它的通用格式如下所示：<br>　　　value &gt;&gt; num<br>　　　num 指定要移位值value 移动的位数。<br>　　　右移的规则只记住一点：符号位不变，左边补上符号位<br>　　2）运算规则：<br>　　　按二进制形式把所有的数字向右移动对应的位数，低位移出(舍弃)，高位的空位补符号位，即正数补零，负数补1<br>　　　当右移的运算数是byte 和short类型时，将自动把这些类型扩大为 int 型。<br>　　　例如，如果要移走的值为负数，每一次右移都在左边补1，如果要移走的值为正数，每一次右移都在左边补0，这叫做符号位扩展（保留符号位）（sign extension ），在进行右移<br>　　　操作时用来保持负数的符号。<br>　　3）数学意义<br>　　　右移一位相当于除2，右移n位相当于除以2的n次方。<br>　　4）计算过程<br>　　　11 &gt;&gt;2(11为int型)<br>　　　1)11的二进制形式为：0000 0000 0000 0000 0000 0000 0000 1011<br>　　　2)把低位的最后两个数字移出，因为该数字是正数，所以在高位补零。<br>　　　3)最终结果是0000 0000 0000 0000 0000 0000 0000 0010。<br>　　　转换为十进制是2。<br>　　　35 &gt;&gt; 2(35为int型)<br>　　　35转换为二进制：0000 0000 0000 0000 0000 0000 0010 0011<br>　　　把低位的最后两个数字移出：0000 0000 0000 0000 0000 0000 0000 1000<br>　　　转换为十进制： 8<br>　　5）在右移时不保留符号的出来<br>　　　右移后的值与0x0f进行按位与运算，这样可以舍弃任何的符号位扩展，以便得到的值可以作为定义数组的下标，从而得到对应数组元素代表的十六进制字符。<br>　　　例如<br>　　　Java代码
+　　</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">public class HexByte &#123;</div><div class="line">　　public static public void main(String args[]) &#123;</div><div class="line">	　　char hex[] = &#123;</div><div class="line">		　　&apos;0&apos;, &apos;1&apos;, &apos;2&apos;, &apos;3&apos;, &apos;4&apos;, &apos;5&apos;, &apos;6&apos;, &apos;7&apos;,</div><div class="line">		　　&apos;8&apos;, &apos;9&apos;, &apos;a&apos;, &apos;b&apos;, &apos;c&apos;, &apos;d&apos;, &apos;e&apos;, &apos;f&apos;&apos;</div><div class="line">		&#125;;</div><div class="line">	　　byte b = (byte) 0xf1;</div><div class="line">	　　System.out.println(&quot;b = 0x&quot; + hex[(b &gt;&gt; 4) &amp; 0x0f] + hex[b &amp; 0x0f]);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>　　　(b &gt;&gt; 4) &amp; 0x0f的运算过程：<br>　　　b的二进制形式为：1111 0001<br>　　　4位数字被移出：1111 1111<br>　　　按位与运算:0000 1111<br>　　　转为10进制形式为：15<br>　　　b &amp; 0x0f的运算过程：<br>　　　b的二进制形式为：1111 0001<br>　　　0x0f的二进制形式为：0000 1111<br>　　　按位与运算：0000 0001<br>　　　转为10进制形式为：1<br>　　　所以，该程序的输出如下：<br>　　　b = 0xf1<br>　　<br>　　<strong>3、无符号右移</strong><br>　　　无符号右移运算符&gt;&gt;&gt;<br>　　　它的通用格式如下所示：<br>　　　value &gt;&gt;&gt; num<br>　　　num 指定要移位值value 移动的位数。<br>　　　无符号右移的规则只记住一点：忽略了符号位扩展，0补最高位<br>　　　无符号右移运算符&gt;&gt;&gt; 只是对32位和64位的值有意义</p>
+<p>转自：<a href="http://blog.sina.com.cn/s/blog_99201d890101hd6s.html" target="_blank" rel="external">http://blog.sina.com.cn/s/blog_99201d890101hd6s.html</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/java/" rel="tag"># java</a>
+          
+            <a href="/tags/算术位移/" rel="tag"># 算术位移</a>
+          
+            <a href="/tags/后台技术/" rel="tag"># 后台技术</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/03/29/JavaStudy_Spring_1_20170329/" rel="next" title="Java学习笔记-Spring框架（1）">
+                <i class="fa fa-chevron-left"></i> Java学习笔记-Spring框架（1）
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview sidebar-panel sidebar-panel-active">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="John Doe" />
+          <p class="site-author-name" itemprop="name">John Doe</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">Artikel</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-name">Tags</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">John Doe</span>
+</div>
+
+
+<div class="powered-by">
+  Erstellt mit  <a class="theme-link" href="https://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
